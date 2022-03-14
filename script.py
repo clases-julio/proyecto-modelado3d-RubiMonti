@@ -43,6 +43,10 @@ class Seleccionado:
 
     def rotarZ(v):
         bpy.ops.transform.rotate(value=v, orient_axis='Z')
+        
+    def unir(new_name):
+        bpy.ops.object.join()
+        Activo.renombrar(new_name)
 
 '''**********************************************************'''
 '''Clase para realizar transformaciones sobre objetos activos'''
@@ -65,7 +69,7 @@ class Activo:
 '''**************************************************************'''
 class Especifico:
     def escalar(nombreObjeto, v):
-        bpy.data.objects[nombreObjeto].scal1.3e = v
+        bpy.data.objects[nombreObjeto].scale = v
 
     def posicionar(nombreObjeto, v):
         bpy.data.objects[nombreObjeto].location = v
@@ -78,7 +82,7 @@ class Especifico:
 '''************************'''
 class Objeto:
     def crearCubo(objName):
-        bpy.ops.mesh.primitive_cube_add(size=0.5, location=(0, 0, 0))
+        bpy.ops.mesh.primitive_cube_add(size=1, location=(0, 0, 0))
         Activo.renombrar(objName)
 
     def crearEsfera(objName):
@@ -98,8 +102,65 @@ class Objeto:
         Activo.renombrar(objName)
         
     def crearCamara(objName):
-        bpy.ops.object.metaball_add(type='CUBE', enter_editmode=False, location=(0, 0, 0))
-        Activo.renombrar(objName)
+        #bpy.ops.object.metaball_add(type='CUBE', enter_editmode=False, location=(0, 0, 0))
+        #Activo.renombrar(objName)
+        Objeto.crearCubo(objName)
+        Seleccionado.escalar((1.2, 0.2, 0.2))
+        Seleccionado.mover((0, 0.5, 1))
+        Objeto.crearCono("Lens1")
+        Seleccionado.escalar((0.15, 0.15, 0.02))
+        Seleccionado.mover((0, 0.59, 1))
+        Seleccionado.rotarX(1.57)
+        Seleccionado.rotarZ(3.14)
+        Objeto.crearCono("Lens2")
+        Seleccionado.escalar((0.15, 0.15, 0.02))
+        Seleccionado.mover((-0.15, 0.59, 1))
+        Seleccionado.rotarX(1.57)
+        Seleccionado.rotarZ(3.14)
+        Objeto.crearCono("Lens3")
+        Seleccionado.escalar((0.15, 0.15, 0.02))
+        Seleccionado.mover((0.3, 0.59, 1))
+        Seleccionado.rotarX(1.57)
+        Seleccionado.rotarZ(3.14)
+        """
+        seleccion = ['Lens1','Lens3','Lens2']
+        seleccionarObjetos(seleccion)
+        bpy.ops.object.join()
+        Activo.renombrar('Lenses')
+        #bpy.ops.object.select_pattern(pattern=objName,case_sensitive=True,extend=True)
+        seleccion = [objName, 'Lenses']
+        seleccionarObjetos(seleccion)
+        bpy.ops.object.modifier_apply(modifier="Auto Boolean")
+        bpy.ops.object.booltool_auto_difference()
+        """
+        Objeto.crearCilindro('CameraSupport', 0.08, 0.1)
+        Seleccionado.escalar((2, 1, 1))
+        Seleccionado.mover((0.0, 0.5, 0.85))
+        """
+        Objeto.crearCilindro('Lens2', 0.06, 0.05)
+        Seleccionado.mover((0, 0.6, 1))
+        Seleccionado.rotarX(1.57)
+        Objeto.crearCilindro('Lens3', 0.06, 0.05)
+        Seleccionado.mover((-0.15, 0.6, 1))
+        Seleccionado.rotarX(1.57)
+        Objeto.crearCilindro('InnerLens1', 0.03, 0.05)
+        Seleccionado.mover((0.3, 0.6, 1))
+        Seleccionado.rotarX(1.57)
+        Objeto.crearCilindro('InnerLens2', 0.03, 0.05)
+        Seleccionado.mover((0, 0.6, 1))
+        Seleccionado.rotarX(1.57)
+        Objeto.crearCilindro('InnerLens3', 0.03, 0.05)
+        Seleccionado.mover((-0.15, 0.6, 1))
+        Seleccionado.rotarX(1.57)
+        seleccion = {'Lens1','Lens2','Lens3','InnerLens1','InnerLens2','InnerLens3'}
+        seleccionarObjetos(seleccion)
+        bpy.ops.object.join()
+        seleccion = {'InnerLens3', objName}
+        seleccionarObjetos(seleccion)
+        bpy.ops.object.modifier_apply(modifier="Auto Boolean")
+        bpy.ops.object.booltool_auto_difference()
+        #bpy.ops.object.join()
+        """
 
 
 '''************'''
@@ -143,8 +204,6 @@ if __name__ == "__main__":
     
     # Creación de la cámara y el sensor láser
     Objeto.crearCamara('Camara')
-    Seleccionado.escalar((0.3, 0.08, 0.1))
-    Seleccionado.mover((0, 0.5, 1))
     
     #Seleccionado.escalar((1, 1, 2))
     #Seleccionado.escalar((0.5, 1, 1))
