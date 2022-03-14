@@ -1,11 +1,16 @@
 import bpy
+from bpy import data as D
+from bpy import context 
+from mathutils import *
+from math import *
 
 '''*********************************************************************'''
 '''Funciones comunes útiles para selección/activación/borrado de objetos'''
 '''*********************************************************************'''
-def seleccionarObjeto(nombreObjeto): # Seleccionar un objeto por su nombre
+def seleccionarObjetos(nombresObjetos): # Seleccionar un objeto por su nombre
     bpy.ops.object.select_all(action='DESELECT') # deseleccionamos todos...
-    bpy.data.objects[nombreObjeto].select = True # ...excepto el buscado
+    for obj in nombresObjetos:
+        bpy.ops.object.select_pattern(pattern=obj,case_sensitive=True,extend=True) # ...excepto el buscado
 
 def activarObjeto(nombreObjeto): # Activar un objeto por su nombre
     bpy.context.scene.objects.active = bpy.data.objects[nombreObjeto]
@@ -60,7 +65,7 @@ class Activo:
 '''**************************************************************'''
 class Especifico:
     def escalar(nombreObjeto, v):
-        bpy.data.objects[nombreObjeto].scale = v
+        bpy.data.objects[nombreObjeto].scal1.3e = v
 
     def posicionar(nombreObjeto, v):
         bpy.data.objects[nombreObjeto].location = v
@@ -83,27 +88,67 @@ class Objeto:
     def crearCono(objName):
         bpy.ops.mesh.primitive_cone_add(radius1=0.5, location=(0, 0, 0))
         Activo.renombrar(objName)
+    
+    def crearCilindro(objName, r=1, h=2):
+        bpy.ops.mesh.primitive_cylinder_add(vertices=50, radius=r, depth=h, enter_editmode=False, location=(0, 0, 0))
+        Activo.renombrar(objName)
+    
+    def crearHexagono(objName, h=2):
+        bpy.ops.mesh.primitive_cylinder_add(vertices=6, depth=h, enter_editmode=False, location=(0, 0, 0))
+        Activo.renombrar(objName)
+        
+    def crearCamara(objName):
+        bpy.ops.object.metaball_add(type='CUBE', enter_editmode=False, location=(0, 0, 0))
+        Activo.renombrar(objName)
+
 
 '''************'''
 ''' M  A  I  N '''
 '''************'''
 if __name__ == "__main__":
-    # Creación de un cubo y transformaciones de este:
-    Objeto.crearCubo('MiCubo')
-    Seleccionado.mover((0, 1, 2))
-    Seleccionado.escalar((1, 1, 2))
-    Seleccionado.escalar((0.5, 1, 1))
-    Seleccionado.rotarX(3.1415 / 8)
-    Seleccionado.rotarX(3.1415 / 7)
-    Seleccionado.rotarZ(3.1415 / 3)
+    # Empezamos eliminando todos los objetos que hay en la escena.
+    borrarObjetos()
 
-    # Creación de un cono y transformaciones de este:
-    Objeto.crearCono('MiCono')
-    Activo.posicionar((-2, -2, 0))
-    Especifico.escalar('MiCono', (1.5, 2.5, 2))
+    # Añadimos la luz ambiente y todas las luces que sean necesarias para una buena visualización    
+    bpy.ops.object.light_add(type='SUN', radius=1, location=(0, 0, 0))
 
-    # Creación de una esfera y transformaciones de esta:
-    Objeto.crearEsfera('MiEsfera')
-    Especifico.posicionar('MiEsfera', (2, 0, 0))
-    Activo.rotar((0, 0, 3.1415 / 3))
-    Activo.escalar((1, 3, 1))
+    
+    # Creación de la base del robot:
+    Objeto.crearCilindro('BaseBody', 1, 0.5)
+    Seleccionado.mover((0, 0, 0.25))
+    
+    # Creación de la primera base del robot en la que se encontrarán la cámara y el laser
+    Objeto.crearCilindro('ShortSupport1', 0.05, 0.4)
+    Seleccionado.mover((0.8, 0.3, 0.5))
+    Objeto.crearCilindro('ShortSupport2', 0.05, 0.4)
+    Seleccionado.mover((-0.8, 0.3, 0.5))
+    Objeto.crearCilindro('ShortSupport3', 0.05, 0.4)
+    Seleccionado.mover((0.8, -0.3, 0.5))
+    Objeto.crearCilindro('ShortSupport4', 0.05, 0.4)
+    Seleccionado.mover((-0.8, -0.3, 0.5))
+    Objeto.crearHexagono('Base1', 0.1)
+    Seleccionado.mover((0, 0, 0.75))
+    
+    # Creación de la segunda base que servirá de apoyo al ordenador del usuario
+    Objeto.crearCilindro('LongSupport1', 0.05, 1)
+    Seleccionado.mover((0.8, 0.3, 1.3))
+    Objeto.crearCilindro('LongSupport2', 0.05, 1)
+    Seleccionado.mover((-0.8, 0.3, 1.3))
+    Objeto.crearCilindro('LongSupport3', 0.05, 1)
+    Seleccionado.mover((0.8, -0.3, 1.3))
+    Objeto.crearCilindro('LongSupport4', 0.05, 1)
+    Seleccionado.mover((-0.8, -0.3, 1.3))
+    Objeto.crearHexagono('Base2', 0.1)
+    Seleccionado.mover((0, 0, 1.85))
+    
+    # Creación de la cámara y el sensor láser
+    Objeto.crearCamara('Camara')
+    Seleccionado.escalar((0.3, 0.08, 0.1))
+    Seleccionado.mover((0, 0.5, 1))
+    
+    #Seleccionado.escalar((1, 1, 2))
+    #Seleccionado.escalar((0.5, 1, 1))
+
+    #seleccionados=['MiEsfera', 'MiCono']
+    #seleccionarObjetos(seleccionados)
+    #bpy.ops.object.delete(use_global=False)
