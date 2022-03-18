@@ -28,5 +28,5 @@ El resultado final se puede ver a continuación.
 ## 2. Imágenes
 
 Aquí podemos ver imagenes del modelo de frente y desde una perspectiva oblicua:
-![alt text](https://github.com/clases-julio/proyecto-modelado3d-RubiMonti/blob/main/images/front_view.jpeg "Front View")
-![alt text](https://github.com/clases-julio/proyecto-modelado3d-RubiMonti/blob/main/images/camera_view.jpeg "Camera View")
+![alt text](https://github.com/clases-julio/proyecto-modelado3d-RubiMonti/blob/main/images/front_view.png "Front View")
+![alt text](https://github.com/clases-julio/proyecto-modelado3d-RubiMonti/blob/main/images/camera_view.png "Camera View")
