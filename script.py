@@ -184,80 +184,111 @@ if __name__ == "__main__":
     # Añadimos la luz ambiente y todas las luces que sean necesarias para una buena visualización    
     bpy.ops.object.light_add(type='SUN', radius=1, location=(0, 0, 0))
     
-    # Creamos las ruedas del robot con sus respectivos agujeros en la base mvil del robot
-    Objeto.crearCilindro('Wheel1', 0.14, 0.08)
-    Seleccionado.mover((0.7, 0, 0))
+    # Creamos las ruedas del robot y los agujeros en la base que las contengan:
+    Objeto.crearCilindro('Wheel1', 0.07, 0.07)
     Seleccionado.rotarY(1.57)
-    Objeto.crearCilindro('H_Wheel_1', 0.16, 0.1)
-    Seleccionado.mover((0.7, 0, 0))
-    Seleccionado.rotarY(1.57)
-    Objeto.crearCilindro('Wheel2', 0.14, 0.08)
-    Seleccionado.mover((-0.7, 0, 0))
-    Seleccionado.rotarY(1.57)
-    Objeto.crearCilindro('H_Wheel_2', 0.16, 0.1)
-    Seleccionado.mover((-0.7, 0, 0))
-    Seleccionado.rotarY(1.57)
-    Objeto.crearCilindro('Wheel3', 0.06, 0.08)
     Seleccionado.mover((0, 0.8, 0))
+    Objeto.crearCilindro('H_Wheel1', 0.075, 0.075)
     Seleccionado.rotarY(1.57)
-    Objeto.crearCilindro('H_Wheel_3', 0.08, 0.1)
     Seleccionado.mover((0, 0.8, 0))
+    Objeto.crearCilindro('Wheel2', 0.07, 0.07)
     Seleccionado.rotarY(1.57)
-    Objeto.crearCilindro('Wheel4', 0.06, 0.08)
     Seleccionado.mover((0, -0.8, 0))
+    Objeto.crearCilindro('H_Wheel2', 0.075, 0.075)
     Seleccionado.rotarY(1.57)
-    Objeto.crearCilindro('H_Wheel_4', 0.08, 0.1)
     Seleccionado.mover((0, -0.8, 0))
+    Objeto.crearCilindro('Wheel3', 0.18, 0.1)
     Seleccionado.rotarY(1.57)
+    Seleccionado.mover((0.7, 0, 0))
+    Objeto.crearCilindro('H_Wheel3', 0.2, 0.12)
+    Seleccionado.rotarY(1.57)
+    Seleccionado.mover((0.7, 0, 0))
+    Objeto.crearCilindro('Wheel4', 0.18, 0.1)
+    Seleccionado.rotarY(1.57)
+    Seleccionado.mover((-0.7, -0, 0))
+    Objeto.crearCilindro('H_Wheel4', 0.2, 0.12)
+    Seleccionado.rotarY(1.57)
+    Seleccionado.mover((-0.7, -0, 0))
     
-        
-    # Creamos el panel con todos los conectores, botones y leds
-    Objeto.crearCilindro('R_Panel', 0.95, 0.5)
-    Seleccionado.mover((0, 0, 0.4))
-    Objeto.crearCilindro('Boton1', 0.05, 0.04)
-    Seleccionado.mover((0, 0.25, 0))
-    Seleccionado.rotarX(1.57)
-    Objeto.crearCubo("Conector1")
-    Seleccionado.escalar((0.3, 0.05, 0.08))
-    Seleccionado.mover((0, 0.25, 0.12))
-    Objeto.crearCubo("Conector2")
-    Seleccionado.escalar((0.1, 0.05, 0.08))
-    Seleccionado.mover((0.4, 0.25, 0.12))
-    Objeto.crearCubo("Conector3")
-    Seleccionado.escalar((0.1, 0.05, 0.08))
-    Seleccionado.mover((-0.4, 0.25, 0.12))
-    Objeto.crearCubo("Conector4")
-    Seleccionado.escalar((0.035, 0.05, 0.06))
-    Seleccionado.mover((-0.5, 0.25, 0.12))
-    Objeto.crearCubo("USB1")
-    Seleccionado.escalar((0.06, 0.05, 0.08))
-    Seleccionado.mover((-0.25, 0.25, 0.12))
-    Objeto.crearCubo("USB2")
-    Seleccionado.escalar((0.06, 0.05, 0.08))
-    Seleccionado.mover((0.25, 0.25, 0.12))
-    Objeto.crearCubo("Panel")
-    Seleccionado.escalar((2, 0.5, 0.5))
-    seleccion = ['Boton1','Conector1','Conector2','Conector3','Conector4','USB1','USB2','Panel']
+    # Creación de la base del robot y le aplicamos la resta de los agujeros de las ruedas:
+    Objeto.crearCilindro('BaseBody', 1, 0.5)
+    Seleccionado.mover((0, 0, 0.25))
+    seleccion = ['H_Wheel1','H_Wheel2','H_Wheel3','H_Wheel4','BaseBody']
     seleccionarObjetos(seleccion)
     bpy.ops.object.modifier_apply(modifier="Auto Boolean")
     bpy.ops.object.booltool_auto_difference()
-    Seleccionado.rotarX(-1.2)
+    
+    # Creamos todos los botones y agujeros del panel
+    Objeto.crearCubo("Conector1")
+    Seleccionado.escalar((0.03, 0.05, 0.03))
+    Seleccionado.mover((0.25, 0.25, 0.17))
+    Objeto.crearCubo("USB1")
+    Seleccionado.escalar((0.025, 0.05, 0.03))
+    Seleccionado.mover((0.18, 0.25, 0.17))
+    Objeto.crearCubo("Conector2")
+    Seleccionado.escalar((0.25, 0.05, 0.03))
+    Seleccionado.mover((0, 0.25, 0.17))
+    Objeto.crearCubo("Conector3")
+    Seleccionado.escalar((0.03, 0.05, 0.03))
+    Seleccionado.mover((-0.25, 0.25, 0.17))
+    Objeto.crearCubo("USB2")
+    Seleccionado.escalar((0.025, 0.05, 0.03))
+    Seleccionado.mover((-0.18, 0.25, 0.17))
+    Objeto.crearCubo("Conector4")
+    Seleccionado.escalar((0.01, 0.05, 0.025))
+    Seleccionado.mover((-0.28, 0.25, 0.17))
+    Objeto.crearCubo("Conector5")
+    Seleccionado.escalar((0.04, 0.05, 0.03))
+    Seleccionado.mover((0.1, 0.25, 0.13))
+    Objeto.crearCilindro('Boton1', 0.02, 0.02)
+    Seleccionado.rotarX(1.57)
+    Seleccionado.mover((-0.15, 0.25, 0.13))
+    Objeto.crearCilindro('Boton2', 0.02, 0.02)
+    Seleccionado.rotarX(1.57)
+    Seleccionado.mover((-0.20, 0.25, 0.13))
+    Objeto.crearCilindro('Boton3', 0.02, 0.02)
+    Seleccionado.rotarX(1.57)
+    Seleccionado.mover((-0.25, 0.25, 0.13))
+    
+    # Creamos los leds con esferas para unirlas al panel
+    Objeto.crearEsfera('Led1')
+    Seleccionado.escalar((0.01, 0.02, 0.01))
+    Seleccionado.mover((0.25, 0.25, 0.13))
+    Objeto.crearEsfera('Led2')
+    Seleccionado.escalar((0.01, 0.02, 0.01))
+    Seleccionado.mover((0.21, 0.25, 0.13))
+    Objeto.crearEsfera('Led3')
+    Seleccionado.escalar((0.01, 0.02, 0.01))
+    Seleccionado.mover((0.17, 0.25, 0.13))
+    
+    # Creamos lo que dara forma al panel y restamos todos los conectores y botones
+    Objeto.crearCilindro('R_Panel', 0.95, 0.5)
+    Seleccionado.mover((0, 0, 0.35))
+    Objeto.crearCubo("Panel")
+    Seleccionado.escalar((2, 0.5, 0.5))
+    seleccion = ['Conector1','Conector2','USB1','Conector3','USB2','Conector4','Conector5','Boton1','Boton2','Boton3','Panel']
+    seleccionarObjetos(seleccion)
+    bpy.ops.object.modifier_apply(modifier="Auto Boolean")
+    bpy.ops.object.booltool_auto_difference()
+    
+    seleccion = ['Panel','Led1','Led2','Led3']
+    seleccionarObjetos(seleccion)
+    Seleccionado.unir('Panel')
+    
+    # Lo rotamos y tras darle forma lo unimos a la base del robot
+    Seleccionado.rotarX(-0.5)
     Seleccionado.mover((0, 0.72, 0.3))
+    
     seleccion = ['R_Panel','Panel']
     seleccionarObjetos(seleccion)
     bpy.ops.object.modifier_apply(modifier="Auto Boolean")
     bpy.ops.object.booltool_auto_intersect()
     
-    # Creación de la base del robot:
-    Objeto.crearCilindro('BaseBody', 1, 0.5)
-    Seleccionado.mover((0, 0, 0.25))
-    seleccion = ['H_Wheel_1','H_Wheel_2','H_Wheel_3','H_Wheel_4','BaseBody']
+    seleccion = ['Panel','BaseBody']
     seleccionarObjetos(seleccion)
-    bpy.ops.object.modifier_apply(modifier="Auto Boolean")
-    bpy.ops.object.booltool_auto_difference()
-
+    Seleccionado.unir('BaseBody')
     
-    # Creación de la primera base del robot en la que se encontrarán la cámara y el laser
+    # Creación de la primera base del robot
     Objeto.crearCilindro('ShortSupport1', 0.05, 0.2)
     Seleccionado.mover((0.8, 0.3, 0))
     Objeto.crearCilindro('ShortSupport2', 0.05, 0.2)
@@ -268,9 +299,9 @@ if __name__ == "__main__":
     Seleccionado.mover((-0.8, -0.3, 0))
     Objeto.crearCubo("R_Base1")
     Seleccionado.escalar((2, 0.5, 0.5))
-    Seleccionado.mover((0, 0.9, 0.2))
+    Seleccionado.mover((0, 0.9, 0.1))
     Objeto.crearHexagono('Base1', 0.1)
-    Seleccionado.mover((0, 0, 0.2))
+    Seleccionado.mover((0, 0, 0.1))
     seleccion = ['R_Base1','Base1']
     seleccionarObjetos(seleccion)
     bpy.ops.object.modifier_apply(modifier="Auto Boolean")
@@ -278,9 +309,9 @@ if __name__ == "__main__":
     seleccion = ['ShortSupport1','ShortSupport2','ShortSupport3','ShortSupport4','Base1']
     seleccionarObjetos(seleccion)
     Seleccionado.unir('LowerBase1')
-    Seleccionado.mover((0, 0, 0.5))
-
-    # Creación de la primera base del robot en la que se encontrarán la cámara y el laser
+    Seleccionado.mover((0, 0, 0.6))
+    
+    # Creación de la segunda base del robot en la que se encontrarán la cámara y el laser
     Objeto.crearCilindro('ShortSupport1', 0.05, 0.4)
     Seleccionado.mover((0.8, 0.3, 0))
     Objeto.crearCilindro('ShortSupport2', 0.05, 0.4)
@@ -294,8 +325,9 @@ if __name__ == "__main__":
     seleccion = ['ShortSupport1','ShortSupport2','ShortSupport3','ShortSupport4','Base2']
     seleccionarObjetos(seleccion)
     Seleccionado.unir('LowerBase2')
-    Seleccionado.mover((0, 0, 0.8))
+    Seleccionado.mover((0, 0, 0.95))
     
+
     # Creación de la segunda base que servirá de apoyo al ordenador del usuario
     Objeto.crearCilindro('LongSupport1', 0.05, 1)
     Seleccionado.mover((0.8, 0.3, 0))
@@ -310,7 +342,7 @@ if __name__ == "__main__":
     seleccion = ['LongSupport1','LongSupport2','LongSupport3','LongSupport4','Base3']
     seleccionarObjetos(seleccion)
     Seleccionado.unir('UpperBase')
-    Seleccionado.mover((0, 0, 1.5))
+    Seleccionado.mover((0, 0, 1.7))
     
     # Unimos todas las piezas del robot que llevamos hasta ahora. Estas formarn la estructura del robot
     seleccion = ['BaseBody','LowerBase1','LowerBase2','UpperBase']
@@ -319,7 +351,7 @@ if __name__ == "__main__":
     
     # Creación de la cámara y el sensor láser
     Objeto.crearCamara('Camara')
-    Seleccionado.mover((0, 0.5, 1.25))
+    Seleccionado.mover((0, 0.5, 1.4))
     
     Objeto.crearLaser('Laser')
-    Seleccionado.mover((0,0,0.95))
+    Seleccionado.mover((0,0,1.2))
